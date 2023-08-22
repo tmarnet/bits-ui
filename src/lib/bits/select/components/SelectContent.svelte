@@ -28,50 +28,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions / applied by melt's builder-->
 
 {#if $open}
-	<Overlay />
-	{@const builder = $menu}
-	{#if asChild}
-		<slot {builder} />
-	{:else if transition}
-		<div
-			transition:transition|global={transitionConfig}
-			use:melt={builder}
-			{...$$restProps}
-			on:m-keydown
-		>
-			<slot {builder} />
-		</div>
-	{:else if inTransition && outTransition}
-		<div
-			in:inTransition|global={inTransitionConfig}
-			out:outTransition|global={outTransitionConfig}
-			use:melt={builder}
-			{...$$restProps}
-			on:m-keydown
-		>
-			<slot {builder} />
-		</div>
-	{:else if inTransition}
-		<div
-			in:inTransition|global={inTransitionConfig}
-			use:melt={builder}
-			{...$$restProps}
-			on:m-keydown
-		>
-			<slot {builder} />
-		</div>
-	{:else if outTransition}
-		<div
-			out:outTransition|global={outTransitionConfig}
-			use:melt={builder}
-			{...$$restProps}
-			on:m-keydown
-		>
-			<slot {builder} />
-		</div>
-	{:else}
-		<div use:melt={builder} {...$$restProps} on:m-keydown>
-			<slot {builder} />
-		</div>
-	{/if}
+	<div use:melt={$menu} {...$$restProps} on:m-keydown>
+		<slot builder={$menu} />
+	</div>
 {/if}

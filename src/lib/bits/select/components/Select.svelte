@@ -40,6 +40,7 @@
 		defaultValue: value,
 		defaultOpen: open,
 		defaultValueLabel: label,
+		forceVisible,
 		onValueChange: ({ next }) => {
 			onValueChange?.(next);
 			value = next;
