@@ -5,6 +5,7 @@ export { default as AvatarDemo } from "./avatar-demo.svelte";
 export { default as ButtonDemo } from "./button-demo.svelte";
 export { default as CheckboxDemo } from "./checkbox-demo.svelte";
 export { default as CollapsibleDemo } from "./collapsible-demo.svelte";
+export { default as ComboboxDemo } from "./combobox-demo.svelte";
 export { default as ContextMenuDemo } from "./context-menu-demo.svelte";
 export { default as DialogDemo } from "./dialog-demo.svelte";
 export { default as DropdownMenuDemo } from "./dropdown-menu-demo.svelte";

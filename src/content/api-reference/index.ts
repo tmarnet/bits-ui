@@ -26,6 +26,7 @@ export const bits = [
 	"button",
 	"checkbox",
 	"collapsible",
+	"combobox",
 	"context-menu",
 	"dialog",
 	"dropdown-menu",
