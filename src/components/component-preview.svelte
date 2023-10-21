@@ -16,7 +16,7 @@
 		<Tabs.Root value="preview" class="relative mr-auto w-full">
 			<div class="flex items-center justify-between">
 				<Tabs.List
-					class="absolute w-full justify-end rounded-none bg-transparent p-0 z-20 top-5 right-4"
+					class="absolute w-full justify-end rounded-none bg-transparent p-0 z-20 top-5 right-4 flex gap-1 items-center"
 				>
 					<Tabs.Trigger
 						value="preview"
@@ -32,10 +32,10 @@
 					</Tabs.Trigger>
 				</Tabs.List>
 			</div>
-			<Tabs.Content value="preview" class="relative rounded-md bg-muted">
+			<Tabs.Content value="preview" class="relative rounded-2xl bg-muted">
 				<div
 					class={cn(
-						"preview flex min-h-[350px] w-full justify-center p-10",
+						"preview flex min-h-[350px] w-full justify-center p-16",
 						{
 							"items-center": align === "center",
 							"items-start": align === "start",
@@ -47,8 +47,10 @@
 					<slot name="preview" />
 				</div>
 			</Tabs.Content>
-			<Tabs.Content value="code">
-				<div class="w-full rounded-md ![&_pre]:mt-0 [&_pre]:max-h-[350px] [&_pre]:overflow-auto">
+			<Tabs.Content value="code" class="relative rounded-2xl bg-muted">
+				<div
+					class="w-full ![&_pre]:mt-0 [&_pre]:overflow-auto [&_pre]:max-h-[600px] [&_pre]:min-h-[350px] ![&_pre]:bg-transparent"
+				>
 					<slot />
 				</div>
 			</Tabs.Content>

@@ -53,6 +53,20 @@ export default {
 			},
 			fontFamily: {
 				sans: ["Inter", ...fontFamily.sans]
+			},
+			opacity: {
+				"4": ".04",
+				"7": ".07",
+				"17": ".17"
+			},
+			boxShadow: {
+				card: "0 2px 1px 1px var(--shadow)",
+				inset: "0 1px 0 0 var(--shadow) inset",
+				button: "0 1px 0 1px var(--shadow)"
+			},
+			borderRadius: {
+				7: "7px",
+				9: "9px"
 			}
 		}
 	},
