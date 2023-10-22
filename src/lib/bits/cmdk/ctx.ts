@@ -24,7 +24,8 @@ export const VALID_ITEM_SELECTOR = `${ITEM_SELECTOR}:not([aria-disabled="true"])
 export const SELECT_EVENT = `cmdk-item-select`;
 export const VALUE_ATTR = `data-value`;
 
-const defaultFilter: CommandProps["filter"] = (value, search) => commandScore(value, search);
+const defaultFilter: (value: string, search: string) => number = (value, search) =>
+	commandScore(value, search);
 
 const defaults = {
 	label: "Command menu",
@@ -105,7 +106,7 @@ export function createCommand(props: CommandProps) {
 					return $allIds;
 				});
 				state.update(($state) => {
-					$state.filtered.items.set(id, score(value));
+					$state.filtered.items.set(id, score(value, $state.search));
 					const sortedState = sort($state, get(shouldFilter));
 					return sortedState;
 				});
@@ -231,7 +232,7 @@ export function createCommand(props: CommandProps) {
 		// check which items should be included
 		for (const id of $allItems) {
 			const value = $allIds.get(id);
-			const rank = score(value);
+			const rank = score(value, state.search);
 			state.filtered.items.set(id, rank);
 			if (rank > 0) {
 				itemCount++;
@@ -330,9 +331,12 @@ export function createCommand(props: CommandProps) {
 		return value;
 	}
 
-	function score(value: string | undefined) {
+	function score(value: string | undefined, search: string) {
 		const filterFn = get(filter);
-		return value ? filterFn(value, get(state).search) : 0;
+		if (!filterFn) {
+			return value ? defaultFilter(value, search) : 0;
+		}
+		return value ? filterFn(value, search) : 0;
 	}
 
 	function scrollSelectedIntoView() {

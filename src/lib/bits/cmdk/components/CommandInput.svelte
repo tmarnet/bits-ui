@@ -22,9 +22,7 @@
 	});
 
 	function handleValueUpdate(v: string) {
-		if (v !== null) {
-			state.updateState("search", v);
-		}
+		state.updateState("search", v);
 	}
 
 	function handleInputChange(e: Event) {

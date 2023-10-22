@@ -5,7 +5,7 @@
 	type $$Props = CommandProps;
 
 	export let label: $$Props["label"] = undefined;
-	export let shouldFilter: $$Props["shouldFilter"] = undefined;
+	export let shouldFilter: $$Props["shouldFilter"] = true;
 	export let filter: $$Props["filter"] = undefined;
 	export let defaultValue: $$Props["defaultValue"] = undefined;
 	export let value: $$Props["value"] = undefined;
@@ -14,7 +14,7 @@
 
 	let thisCommandEl: HTMLDivElement | undefined = undefined;
 
-	const { commandEl, handleRootKeydown, ids } = createCommand({
+	const { commandEl, handleRootKeydown, ids, state } = createCommand({
 		label,
 		shouldFilter,
 		filter,
@@ -32,6 +32,8 @@
 	}
 
 	$: updateCommandEl(thisCommandEl);
+
+	$: console.log($state);
 </script>
 
 <!--  eslint-disable-next-line svelte/valid-compile -->
