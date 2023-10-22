@@ -1,11 +1,35 @@
 <script lang="ts">
-	import { Button, buttonVariants } from "@/components/ui/button";
-	import * as Dialog from "@/components/ui/dialog";
-	import * as Input from "@/components/ui/input";
-	import * as Label from "@/components/ui/label";
+	// import { Button, buttonVariants } from "@/components/ui/button";
+	// import * as Dialog from "@/components/ui/dialog";
+	// import * as Input from "@/components/ui/input";
+	// import * as Label from "@/components/ui/label";
+	import * as Command from "$lib/bits/cmdk";
+
+	let loading = false;
 </script>
 
-<Dialog.Root>
+<Command.Root>
+	<Command.Input />
+	<Command.List>
+		{#if loading}
+			<Command.Loading>Hang on...</Command.Loading>
+		{/if}
+
+		<Command.Empty>No results found.</Command.Empty>
+
+		<Command.Group heading="Fruits">
+			<Command.Item>Apple</Command.Item>
+			<Command.Item>Orange</Command.Item>
+			<Command.Separator />
+			<Command.Item>Pear</Command.Item>
+			<Command.Item>Blueberry</Command.Item>
+		</Command.Group>
+
+		<Command.Item>Fish</Command.Item>
+	</Command.List>
+</Command.Root>
+
+<!-- <Dialog.Root>
 	<Dialog.Trigger class={buttonVariants({ variant: "outline" })}>Edit Profile</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
@@ -28,4 +52,4 @@
 			<Button type="submit">Save changes</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
-</Dialog.Root>
+</Dialog.Root> -->

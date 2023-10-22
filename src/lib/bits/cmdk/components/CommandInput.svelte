@@ -2,11 +2,11 @@
 	import { derived } from "svelte/store";
 	import { ITEM_SELECTOR, VALUE_ATTR, getCtx, getState } from "../ctx.js";
 	import type { HTMLInputAttributes } from "svelte/elements";
-	import { isHTMLInputElement } from "$lib/internal/is.js";
+	import { isBrowser, isHTMLInputElement } from "$lib/internal/is.js";
 
 	type $$Props = HTMLInputAttributes;
 
-	export let value: $$Props["value"] = undefined;
+	export let value: $$Props["value"] = "";
 
 	const { ids, commandEl } = getCtx();
 	const state = getState();
@@ -16,6 +16,7 @@
 	const isControlled = value != null;
 
 	const selectedItemId = derived([valueStore, commandEl], ([$value, $commandEl]) => {
+		if (!isBrowser) return undefined;
 		const item = $commandEl?.querySelector(`${ITEM_SELECTOR}[${VALUE_ATTR}="${$value}"]`);
 		return item?.getAttribute("id");
 	});

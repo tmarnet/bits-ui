@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { srOnlyStyles, styleToString } from "$lib/internal";
+	import { isBrowser, srOnlyStyles, styleToString } from "$lib/internal";
 	import { createCommand } from "../ctx";
 	import type { CommandProps } from "../types";
 	type $$Props = CommandProps;
@@ -25,6 +25,7 @@
 	});
 
 	function updateCommandEl(currentEl: HTMLDivElement | undefined) {
+		if (!isBrowser) return;
 		if (currentEl) {
 			commandEl.set(currentEl);
 		}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { generateId, isHTMLElement } from "$lib/internal";
+	import { generateId, isBrowser, isHTMLElement } from "$lib/internal";
 	import { onMount } from "svelte";
 	import { VALUE_ATTR, getCtx, getGroup, getState } from "../ctx";
 	import type { ItemProps } from "../types";
@@ -40,6 +40,7 @@
 	});
 
 	function handleItemEffect(deps: Array<string | undefined | HTMLElement>) {
+		if (!isBrowser) return value;
 		const newValue = (() => {
 			for (const part of deps) {
 				if (typeof part === "string") {
@@ -55,7 +56,9 @@
 		})();
 
 		context.value(id, newValue);
-		itemEl.setAttribute(VALUE_ATTR, newValue);
+		if (itemEl) {
+			itemEl.setAttribute(VALUE_ATTR, newValue);
+		}
 		value = newValue;
 		return newValue;
 	}
