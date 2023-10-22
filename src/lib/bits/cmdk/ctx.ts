@@ -1,6 +1,6 @@
 import { getContext, setContext } from "svelte";
 import { commandScore } from "./command-score";
-import type { CommandProps, Context, State, StateStore } from "./types";
+import type { CommandProps, Context, Group, State, StateStore } from "./types";
 import { get, writable } from "svelte/store";
 import {
 	omit,
@@ -8,14 +8,12 @@ import {
 	toWritableStores,
 	isHTMLElement,
 	isUndefined,
-	isHTMLInputElement,
 	kbd
 } from "$lib/internal/index.js";
 
 const NAME = "Command";
 const STATE_NAME = "CommandState";
 const GROUP_NAME = "CommandGroup";
-const IDS_NAME = "CommandIds";
 
 export const LIST_SELECTOR = `[cmdk-list-sizer]`;
 export const GROUP_SELECTOR = `[cmdk-group]`;
@@ -38,17 +36,28 @@ const defaults = {
 	filter: defaultFilter
 } satisfies CommandProps;
 
-export const ctx = {
-	get: getCtx,
-	getState
-};
-
-function getCtx() {
+export function getCtx() {
 	return getContext<Context>(NAME);
 }
 
-function getState() {
+export function getState() {
 	return getContext<StateStore>(STATE_NAME);
+}
+
+export function createGroup(forceVisible: boolean | undefined) {
+	const id = generateId();
+
+	setContext<Group>(GROUP_NAME, {
+		id,
+		forceVisible: isUndefined(forceVisible) ? false : forceVisible
+	});
+	return { id };
+}
+
+export function getGroup() {
+	const context = getContext<Group>(GROUP_NAME);
+	if (!context) return undefined;
+	return context;
 }
 
 export function createCommand(props: CommandProps) {
@@ -176,7 +185,8 @@ export function createCommand(props: CommandProps) {
 		},
 		label: get(label) || props["aria-label"] || "",
 		commandEl,
-		ids
+		ids,
+		updateState
 	};
 
 	function updateState<K extends keyof State>(key: K, value: State[K], scrollIntoView?: boolean) {
@@ -430,11 +440,6 @@ export function createCommand(props: CommandProps) {
 		} else {
 			updateSelectedByChange(-1);
 		}
-	}
-
-	function handleInputChange(e: Event) {
-		if (!isHTMLInputElement(e.target)) return;
-		updateState("search", e.target.value);
 	}
 
 	function handleRootKeydown(e: KeyboardEvent) {

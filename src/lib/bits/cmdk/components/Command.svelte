@@ -43,8 +43,8 @@
 	id={ids.root}
 	{...$$restProps}
 >
-	<!--  -->
 	<label data-cmdk-label="" for={ids.input} id={ids.label} style={styleToString(srOnlyStyles)}>
 		{label ?? ""}
 	</label>
+	<slot />
 </div>

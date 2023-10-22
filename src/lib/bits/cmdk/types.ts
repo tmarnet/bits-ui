@@ -1,6 +1,7 @@
 import type { HTMLDivAttributes } from "$lib/internal";
 import type * as Dialog from "$lib/bits/dialog";
 import type { Writable } from "svelte/store";
+import type { HTMLInputAttributes } from "svelte/elements";
 
 export type LoadingProps = HTMLDivAttributes & {
 	/** Estimated progress of loading asynchronous options */
@@ -71,12 +72,13 @@ export type CommandOptionStores = {
 
 export type Context = {
 	value: (id: string, value: string) => void;
-	item: (id: string, groupId: string) => void;
+	item: (id: string, groupId: string | undefined) => void;
 	group: (id: string) => () => void;
 	filter: () => boolean;
 	label: string;
 	commandEl: Writable<HTMLDivElement | null>;
 	ids: CommandIds;
+	updateState: <K extends keyof State>(key: K, value: State[K], scrollIntoView?: boolean) => void;
 };
 
 export type ContextStore = Writable<Context>;
@@ -97,6 +99,7 @@ export type StateStore = Writable<State> & {
 
 export type Group = {
 	id: string;
+	forceVisible: boolean;
 };
 
 export type CommandIds = {
@@ -105,3 +108,33 @@ export type CommandIds = {
 	label: string;
 	list: string;
 };
+
+export type InputProps = {
+	/** Callback function called when the search value changes */
+	onValueChange?: (search: string) => void;
+} & HTMLInputAttributes;
+
+export type GroupProps = {
+	/** Optional heading to render for the group */
+	heading?: string;
+
+	/** If no heading provided, you must provide a value that is unique for this group */
+	value?: string;
+
+	/** Whether or not this group is forcefully rendered regardless of filtering */
+	forceVisible?: boolean;
+} & HTMLDivAttributes;
+
+export type ItemProps = {
+	/** Whether this item is currently disabled. */
+	disabled?: boolean;
+	/** Event handler for when this item is selected, either via click or keyboard selection. */
+	onSelect?: (value: string) => void;
+	/**
+	 * A unique value for this item.
+	 * If no value is provided, it will be inferred from `children` or the rendered `textContent`. If your `textContent` changes between renders, you _must_ provide a stable, unique `value`.
+	 */
+	value?: string;
+	/** Whether this item is forcibly rendered regardless of filtering. */
+	forceVisible?: boolean;
+} & HTMLDivAttributes;

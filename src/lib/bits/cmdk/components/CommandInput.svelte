@@ -1,0 +1,57 @@
+<script lang="ts">
+	import { derived } from "svelte/store";
+	import { ITEM_SELECTOR, VALUE_ATTR, getCtx, getState } from "../ctx.js";
+	import type { HTMLInputAttributes } from "svelte/elements";
+	import { isHTMLInputElement } from "$lib/internal/is.js";
+
+	type $$Props = HTMLInputAttributes;
+
+	export let value: $$Props["value"] = undefined;
+
+	const { ids, commandEl } = getCtx();
+	const state = getState();
+	const search = derived(state, ($state) => $state.search);
+	const valueStore = derived(state, ($state) => $state.value);
+
+	const isControlled = value != null;
+
+	const selectedItemId = derived([valueStore, commandEl], ([$value, $commandEl]) => {
+		const item = $commandEl?.querySelector(`${ITEM_SELECTOR}[${VALUE_ATTR}="${$value}"]`);
+		return item?.getAttribute("id");
+	});
+
+	function handleValueUpdate(v: string) {
+		if (v !== null) {
+			state.updateState("search", v);
+		}
+	}
+
+	function handleInputChange(e: Event) {
+		if (!isHTMLInputElement(e.target)) return;
+		state.updateState("search", e.target.value);
+	}
+
+	$: handleValueUpdate(value);
+
+	let attrs: Record<string, unknown>;
+
+	$: attrs = {
+		type: "text",
+		"data-cmdk-input": "",
+		autocomplete: "off",
+		autocorrect: "off",
+		spellcheck: false,
+		"aria-autocomplete": "list",
+		role: "combobox",
+		"aria-expanded": true,
+		"aria-controls": ids.list,
+		"aria-labelledby": ids.label,
+		"aria-activedescendant": $selectedItemId ?? undefined
+	};
+</script>
+
+{#if isControlled}
+	<input {...attrs} bind:value on:change={handleInputChange} {...$$restProps} />
+{:else}
+	<input {...attrs} value={$search} on:change={handleInputChange} {...$$restProps} />
+{/if}
