@@ -92,3 +92,5 @@ export type SideAndAlign = {
 	align?: Align;
 	alignOffset?: number;
 };
+
+export type ValueOf<T> = T[keyof T];
