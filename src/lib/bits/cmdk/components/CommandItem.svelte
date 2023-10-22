@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { generateId, isBrowser, isHTMLElement } from "$lib/internal";
+	import { generateId } from "$lib/internal";
 	import { onMount } from "svelte";
 	import { VALUE_ATTR, getCtx, getGroup, getState } from "../ctx";
 	import type { ItemProps } from "../types";
@@ -11,10 +11,6 @@
 	export let value: string = "";
 	export let onSelect: $$Props["onSelect"] = undefined;
 	export let forceVisible: $$Props["forceVisible"] = false;
-
-	let trueValue: string;
-
-	$: trueValue = handleItemEffect([value, itemEl]);
 
 	const id = generateId();
 	const groupContext = getGroup();
@@ -30,47 +26,29 @@
 		return $state.filtered.items.has(id);
 	});
 
-	const selected = derived(state, ($state) => $state.value === trueValue);
-
-	let itemEl: HTMLElement;
+	const selected = derived(state, ($state) => $state.value === value);
 
 	onMount(() => {
 		const unsubItem = context.item(id, groupContext?.id);
 		return unsubItem;
 	});
 
-	function handleItemEffect(deps: Array<string | undefined | HTMLElement>) {
-		if (!isBrowser) return value;
-		const newValue = (() => {
-			for (const part of deps) {
-				if (typeof part === "string") {
-					return part.trim().toLowerCase();
-				}
-
-				if (isHTMLElement(part) && part.textContent) {
-					return part.textContent.trim().toLowerCase();
-				}
-				return value;
-			}
-			return value;
-		})();
-
-		context.value(id, newValue);
-		if (itemEl) {
-			itemEl.setAttribute(VALUE_ATTR, newValue);
+	function itemAction(node: HTMLElement) {
+		if (!value && node.textContent) {
+			value = node.textContent.trim().toLowerCase();
 		}
-		value = newValue;
-		return newValue;
+		context.value(id, value);
+		node.setAttribute(VALUE_ATTR, value);
 	}
 
 	function handleItemClick() {
 		if (disabled) return;
 		select();
-		onSelect?.(trueValue);
+		onSelect?.(value);
 	}
 
 	function select() {
-		state.updateState("value", trueValue, true);
+		state.updateState("value", value, true);
 	}
 </script>
 
@@ -78,14 +56,15 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-interactive-supports-focus -->
 	<div
-		bind:this={itemEl}
 		{id}
-		data-cmdk-item=""
 		role="option"
+		use:itemAction
 		aria-disabled={disabled || undefined}
 		aria-selected={$selected || undefined}
 		data-disabled={disabled || undefined}
 		data-selected={$selected || undefined}
+		data-cmdk-item=""
+		data-value={value}
 		on:pointermove={disabled ? undefined : select}
 		on:click={disabled ? undefined : handleItemClick}
 		{...$$restProps}

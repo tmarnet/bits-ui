@@ -15,13 +15,12 @@ const NAME = "Command";
 const STATE_NAME = "CommandState";
 const GROUP_NAME = "CommandGroup";
 
-export const LIST_SELECTOR = `[cmdk-list-sizer]`;
-export const GROUP_SELECTOR = `[cmdk-group]`;
-export const GROUP_ITEMS_SELECTOR = `[cmdk-group-items]`;
-export const GROUP_HEADING_SELECTOR = `[cmdk-group-heading]`;
-export const ITEM_SELECTOR = `[cmdk-item]`;
+export const LIST_SELECTOR = `[data-cmdk-list-sizer]`;
+export const GROUP_SELECTOR = `[data-cmdk-group]`;
+export const GROUP_ITEMS_SELECTOR = `[data-cmdk-group-items]`;
+export const GROUP_HEADING_SELECTOR = `[data-cmdk-group-heading]`;
+export const ITEM_SELECTOR = `[data-cmdk-item]`;
 export const VALID_ITEM_SELECTOR = `${ITEM_SELECTOR}:not([aria-disabled="true"])`;
-export const SELECT_EVENT = `cmdk-item-select`;
 export const VALUE_ATTR = `data-value`;
 
 const defaultFilter: (value: string, search: string) => number = (value, search) =>
@@ -198,13 +197,9 @@ export function createCommand(props: CommandProps) {
 
 			if (key === "search") {
 				const filteredState = filterItems(curr, $shouldFilter);
-				if (filteredState) {
-					curr = filteredState;
-				}
+				curr = filteredState;
 				const sortedState = sort(curr, $shouldFilter);
-				if (sortedState) {
-					curr = sortedState;
-				}
+				curr = sortedState;
 			} else if (key === "value") {
 				if (!isUndefined(props.value)) {
 					const newValue = (value ?? "") as string;

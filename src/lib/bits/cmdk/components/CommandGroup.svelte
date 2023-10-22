@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { generateId, isBrowser, isHTMLElement, isUndefined } from "$lib/internal";
+	import { generateId, isUndefined } from "$lib/internal";
 	import { derived } from "svelte/store";
 	import { VALUE_ATTR, getCtx, getState, createGroup } from "../ctx";
 	import type { GroupProps } from "../types";
@@ -10,9 +10,6 @@
 	export let heading: $$Props["heading"] = undefined;
 	export let value: string = "";
 	export let forceVisible: $$Props["forceVisible"] = false;
-
-	let groupEl: HTMLElement;
-	let headingEl: HTMLElement;
 
 	const { id } = createGroup(isUndefined(forceVisible));
 
@@ -32,41 +29,34 @@
 		return unsubGroup;
 	});
 
-	function handleGroupEffect(deps: Array<string | undefined | HTMLElement>) {
-		if (!isBrowser) return "";
-		const newValue = (() => {
-			for (const part of deps) {
-				if (typeof part === "string") {
-					return part.trim().toLowerCase();
-				}
-
-				if (isHTMLElement(part) && part.textContent) {
-					return part.textContent?.trim().toLowerCase();
-				}
-				return value;
-			}
-			return value;
-		})();
-
-		context.value(id, newValue);
-		if (groupEl) {
-			groupEl.setAttribute(VALUE_ATTR, newValue);
+	function groupAction(node: HTMLElement) {
+		if (value) {
+			context.value(id, value);
+			node.setAttribute(VALUE_ATTR, value);
+			return;
 		}
-		value = newValue;
-	}
 
-	$: handleGroupEffect([value, heading, headingEl, groupEl]);
+		if (heading) {
+			value = heading.trim().toLowerCase();
+		} else if (node.textContent) {
+			value = node.textContent.trim().toLowerCase();
+		}
+
+		context.value(id, value);
+		node.setAttribute(VALUE_ATTR, value);
+	}
 </script>
 
 <div
-	bind:this={groupEl}
+	use:groupAction
 	data-cmdk-group=""
 	role="presentation"
 	hidden={$render ? undefined : true}
+	data-value={value}
 	{...$$restProps}
 >
 	{#if heading}
-		<div bind:this={headingEl} data-cmdk-group-heading="" aria-hidden id={headingId}>
+		<div data-cmdk-group-heading="" aria-hidden id={headingId}>
 			{heading}
 		</div>
 	{/if}
