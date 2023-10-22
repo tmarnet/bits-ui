@@ -12,7 +12,7 @@
 	export let onValueChange: $$Props["onValueChange"] = undefined;
 	export let loop: $$Props["loop"] = undefined;
 
-	const { commandEl, handleRootKeydown, ids, state } = createCommand({
+	const { commandEl, handleRootKeydown, ids } = createCommand({
 		label,
 		shouldFilter,
 		filter,
@@ -25,8 +25,6 @@
 	function rootAction(node: HTMLDivElement) {
 		commandEl.set(node);
 	}
-
-	$: console.log($state);
 </script>
 
 <!--  eslint-disable-next-line svelte/valid-compile -->

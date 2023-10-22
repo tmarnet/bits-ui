@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { generateId } from "$lib/internal";
+	import { generateId, isUndefined } from "$lib/internal";
 	import { onMount } from "svelte";
 	import { VALUE_ATTR, getCtx, getGroup, getState } from "../ctx";
 	import type { ItemProps } from "../types";
@@ -23,7 +23,9 @@
 		if (trueForceVisible) return true;
 		if (context.filter() === false) return true;
 		if (!$state.search) return true;
-		return $state.filtered.items.has(id);
+		const currentScore = $state.filtered.items.get(id);
+		if (isUndefined(currentScore)) return false;
+		return currentScore > 0;
 	});
 
 	const selected = derived(state, ($state) => $state.value === value);
