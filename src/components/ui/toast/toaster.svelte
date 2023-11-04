@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { Toaster as ToasterPrimitive } from "$lib";
 	import ToasterViewport from "./toaster-viewport.svelte";
-	import { initToaster } from "$lib";
 	import Toast from "./toast.svelte";
 	import ToastTitle from "./toast-title.svelte";
 	import ToastClose from "./toast-close.svelte";
 
-	type ToastData = {
+	type ToasterData = {
 		title: string;
 		description: string;
 		type?: "default" | "destructive";
 	};
 
-	const toaster = initToaster<ToastData>();
+	type $$Props = ToasterPrimitive.Props<ToasterData>;
+	export let toaster: $$Props["toaster"];
 </script>
 
-<ToasterPrimitive.Root {toaster} let:toasts>
+<ToasterPrimitive.Root {toaster} let:toasts {...$$restProps}>
 	<ToasterViewport>
 		{#each toasts as { id, data: { title, description, type } } (id)}
 			<Toast {id} variant={type ? type : "default"}>

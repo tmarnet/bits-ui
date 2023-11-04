@@ -32,8 +32,13 @@ export function getToast<T = object>() {
 	const {
 		helpers: { addToast }
 	} = getCtx<T>();
+
+	function toast(props: T) {
+		return addToast({ data: props });
+	}
+
 	return {
-		toast: addToast
+		toast
 	};
 }
 

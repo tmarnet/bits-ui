@@ -4,6 +4,15 @@
 	import { setInitialClassState } from "@/components/light-switch/light-switch";
 	import { navigation } from "@/config";
 	import "@/styles/app.postcss";
+	import Toaster from "@/components/ui/toast/toaster.svelte";
+	import { initToaster } from "$lib";
+	type ToastData = {
+		title: string;
+		description: string;
+		type?: "default" | "destructive";
+	};
+
+	const toaster = initToaster<ToastData>();
 </script>
 
 <svelte:head>
@@ -11,6 +20,7 @@
 	{@html `<\u{73}cript nonce="%sveltekit.nonce%">(${setInitialClassState.toString()})();</script>`}
 </svelte:head>
 
+<Toaster {toaster} />
 <SiteHeader />
 <main class="min-h-[calc(100vh-64px)]">
 	<div
