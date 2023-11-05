@@ -28,30 +28,8 @@ type Props<T> = CreateToasterProps & {
 	asChild?: boolean;
 } & HTMLDivAttributes;
 
-type ViewportProps = {
-	/**
-	 * Whether to delegate rendering of the component to
-	 * a custom element.
-	 *
-	 * If `true`, you will need to accept the `action` & `attrs`,
-	 * slot props, and apply them to the custom element.
-	 *
-	 * @example
-	 * ```svelte
-	 * <Toaster.Viewport asChild let:action let:attrs>
-	 * 	<div use:action {...attrs}>
-	 *   	<!-- ... -->
-	 * 	</div>
-	 * </Toaster.Viewport>
-	 * ```
-	 */
-	asChild?: boolean;
-} & HTMLDivAttributes;
-
 export type {
 	Props,
-	ViewportProps,
 	//
-	Props as ToasterProps,
-	ViewportProps as ToasterViewportProps
+	Props as ToasterProps
 };

@@ -1,11 +1,8 @@
 import Root from "./Toaster.svelte";
-import Viewport from "./ToasterViewport.svelte";
 
 export {
 	Root,
-	Viewport,
 	//
-	Root as Toaster,
-	Viewport as ToasterViewport
+	Root as Toaster
 };
 export * from "./types.js";
