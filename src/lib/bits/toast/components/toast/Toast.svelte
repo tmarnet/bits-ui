@@ -22,7 +22,9 @@
 {#if asChild}
 	<slot {builder} {attrs} />
 {:else}
-	<div
+	<li
+		style:user-select="none"
+		style:touch-action="none"
 		use:melt={builder}
 		{...attrs}
 		{...$$restProps}
@@ -31,5 +33,5 @@
 		on:m-pointerleave={dispatch}
 	>
 		<slot {builder} {attrs} />
-	</div>
+	</li>
 {/if}

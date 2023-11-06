@@ -35,7 +35,7 @@
 {#if asChild}
 	<slot action={portal} {attrs} toasts={$toasts} />
 {:else}
-	<div use:portal {...attrs} {...$$restProps}>
+	<ol use:portal {...attrs} {...$$restProps}>
 		<slot action={portal} {attrs} toasts={$toasts} />
-	</div>
+	</ol>
 {/if}
