@@ -34,6 +34,8 @@
 		transitionTimes,
 		tOpen,
 		onOpenChange: ({ next }) => {
+			console.log({ open });
+			console.log({ next });
 			if (open !== next) {
 				onOpenChange?.(next);
 			}
